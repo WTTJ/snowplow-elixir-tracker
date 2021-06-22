@@ -6,9 +6,14 @@ defmodule Snowplow.Events.HelperTest do
 
   describe "generate_uuid/0" do
     test "returns valid v4 UUID" do
-      response = Helper.generate_uuid()
-      assert {:ok, bytes} = Base.decode16(response, case: :lower)
-      assert <<_::48, version::4, _::12, _::2, _::62>> = bytes
+      assert response = Helper.generate_uuid()
+
+      decoded = response
+        |> String.replace("-", "")
+        |> Base.decode16!(case: :lower)
+
+      <<_::48, version::4, _::12, _::2, _::62>> = decoded
+
       assert version == 4
     end
   end
