@@ -14,7 +14,7 @@ defmodule SnowplowTracker do
 
   @doc false
   @spec track(Payload.t(), Tracker.t(), list()) :: {:ok, String.t()} | no_return()
-  defp track(%Payload{} = payload, %Tracker{} = tracker, contexts \\ []) do
+  defp track(%Payload{} = payload, %Tracker{} = tracker, contexts) do
     tracker = Tracker.validate(tracker)
 
     payload
