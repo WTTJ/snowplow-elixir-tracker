@@ -4,11 +4,19 @@ defmodule SnowplowTracker.Events.Helper do
   function used to set the default values in the payload.
   """
 
+  @uuid_version 4
+  @rfc_4122_variant10 2
+
   @doc """
   Generate a v4 UUID string to uniquely identify an event
   """
   @spec generate_uuid() :: String.t()
-  def generate_uuid, do: UUID.uuid4()
+  def generate_uuid do
+    <<time_low_mid::48, _version::4, time_high::12, _reserved::2, rest::62>> = :crypto.strong_rand_bytes(16)
+
+    <<time_low_mid::48, @uuid_version::4, time_high::12, @rfc_4122_variant10::2, rest::62>>
+    |> Base.encode16(case: :lower)
+  end
 
   @doc """
   Generate unix timestamp in microseconds to identify time of each event.
